@@ -7,7 +7,7 @@ import java.util.Random;
  * Along with the constructor for Mascot, this class contains a method that returns a random speed,
  * which is a characteristic of a Mascot object. The run method defines how the animation will run once
  * the start method is invoked (Start() invokes run).
- * @author Sabirah Shuaybi
+ * @author Sabirah F. Shuaybi
  * @version 11/01/16
  */
 public class Mascot extends ActiveObject {
