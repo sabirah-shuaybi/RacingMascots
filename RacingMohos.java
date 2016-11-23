@@ -7,6 +7,7 @@ import objectdraw.*;
  * The class displays the racing lines as well as the visible images of the four mascots
  * at the start of the program.
  * On a user's mouse click, this class starts the animation by invoking start().
+ *
  * @author Sabirah Shuaybi
  * @version 11/01/16
  */
@@ -22,28 +23,28 @@ public class RacingMohos extends WindowController {
     private static final int ICON_BUFFER_SPACE = 10;
     private static final int TEXT_BUFFER_SPACE = 20;
 
-    //Instance variable for the finish line
+    //To remember the finish line
     private Line finishLine;
-    
-    //To store footer text to be able to manipulate it throughout the program 
+
+    //To store footer text to be able to change banner to declare a winner
     private Text text;
 
-    //Storing certain coordinates as instance variables
-    //This is so they can be used in multiple methods for arrangement/positioning purposes
+    //To store certain coordinates throughout the program
+    //Significance: they can be used in multiple methods for arrangement/positioning purposes
     private int beginLineX;
     private int firstLaneY;
     private int middleLaneY;
     private int lastLaneY;
     private int bottomLineY;
 
-    //Instance variables for the four instances of Mascot
+    //The four instances of Mascot
     private Mascot greenMascot;
     private Mascot blueMascot;
     private Mascot redMascot;
     private Mascot yellowMascot;
 
-    //Instance variables for storing the loaded pictures of mascots
-    //Needed across two methods: displayPicture() and constructMascots()
+    //To store the loaded pictures of mascots
+    //Significance: needed across two methods: displayPicture() and constructMascots()
     private Picture greenMascotPic;
     private Picture blueMascotPic;
     private Picture redMascotPic;
@@ -56,26 +57,26 @@ public class RacingMohos extends WindowController {
     private VisibleImage red;
     private VisibleImage yellow;
 
-    //Instance variable for winner mascot is null when program starts
+    //Set winner mascot to null when program starts
     private Mascot winner = null;
 
     public void begin() {
 
-        //Resizing the canvas window to desired width and height
+        //Resize canvas window to desired width and height
         resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        //Invoking method that will create racing lines
+        //Create racing lines
         createLines();
 
-        //Invoking method that will display the pictures of the mascots
+        //Display the pictures of the mascots
         displayPicture();
 
-        //Invoking method that will create and display starting text "Racing Mohos"
+        //Create and display starting text "Racing Mohos"
         displayFooterText("Racing Mohos");
     }
 
-    //This method is responsible for creating all the lines of the runway track
-    //Including lines for top and bottom and start and finish as well as lines for lanes separating the mascots
+    /* Creates all lines of runway track including lines for top and bottom and start and finish
+    as well as lines for lanes separating the mascots */
     private void createLines(){
 
         int START_POINT_X = WINDOW_WIDTH - SIDE_BUFFER_SPACE;
@@ -103,8 +104,8 @@ public class RacingMohos extends WindowController {
         finishLine = new Line(finishLineX, TOP_BUFFER_SPACE, finishLineX, bottomLineY, canvas);
     }
 
-    //Method that is in charge of loading mascot picture from web and transforming it into a visible image
-    //displayPicture also positions the visible images in their corresponding places at the start line of race
+    /* Loads mascot picture from web and transforms it into a visible image
+       Positions the visible images in their corresponding places at start line of race */
     private void displayPicture(){
 
         int pictureX = beginLineX + ICON_BUFFER_SPACE;
@@ -131,41 +132,41 @@ public class RacingMohos extends WindowController {
 
     }
 
-    //Responsible for creating, positioning and formatting the text display at bottom of screen
+    /* Creates, positions and formats banner at bottom of screen */
     private void displayFooterText(String textContent){
 
-        //Constructing a text object at an arbitrary location
+        //Construct a text object at an arbitrary location
         text = new Text(textContent, 10, 10, canvas);
 
-        //Print text's font and size on terminal to then manipulate font size (original text size = 13)
+        //Print text's font and size to then manipulate font size (original text size = 13)
         System.out.println(text.getFont());
         text.setFontSize(20);
 
-        //Defining a new color and setting text to that color
+        //Set banner to a dark magenta hue
         Color darkMagenta = new Color(139, 0, 139);
         text.setColor(darkMagenta);
 
-        //Making the text bold
+        //Make banner bold
         boolean bold = true;
         text.setBold(bold);
 
-        //Centering the text object within the canvas without hard-coding
+        //Dynamically center banner within the canvas
         double textLocX = (canvas.getWidth()/2) - (text.getWidth()/2);
         double textLocY = bottomLineY + TEXT_BUFFER_SPACE;
         text.moveTo(textLocX, textLocY);
     }
 
-    //A mini-method that clears the previous text object to eventally enable a fresh text display announcing winner
+    /* Clears the previous banner to eventally enable a fresh banner announcing winner */
     private void clearFooterText(){
         text.removeFromCanvas();
     }
-    
-    //Private method that constructs 4 instances of the Mascot class and assigns to corresponding inst vars
+
+    /* Constructs 4 instances of the Mascot class */
     private void constructMascots(){
+
         //For debugging purposes
         System.out.println("Entering constructMascots");
 
-        //Along with visible image and finish line, "this" is also passed into the constructor
         //Passing "this" allows the Mascot class to have a reference to the parent class aka RacingMohos
         greenMascot = new Mascot(green, finishLine, this);
         blueMascot = new Mascot(blue, finishLine, this);
@@ -177,37 +178,39 @@ public class RacingMohos extends WindowController {
 
         System.out.println("Entering onMouseClick");
 
-        //Constructing all the mascots on a user click
+        //Construct all mascots on a user click
         constructMascots();
 
-        //Calling start on each instance to invoke run which is in charge of activating the animation
+        //Call start on each instance to invoke run method
+        //Run method will activate the animation
         greenMascot.start();
         blueMascot.start();
         redMascot.start();
         yellowMascot.start();
     }
 
-    //A method that assigns winner to the first mascot who finishes the race and "registers"
-    //This method is invoked by all the mascots and only the first one is registered as the winner
+    /* Assigns winner to the first mascot who finishes the race and "registers"
+    This method is invoked by all mascots, but only the first one is registered as the winner */
     public void registerFinish(Mascot mascot) {
-        
+
+        //Null check prevents subsequent mascots from being assigned to winner
+        //Significance: we only care about the first mascot (first mascot to register = winner)
         if (winner == null) {
             winner = mascot;
 
-            //Announcing the winning mascot
+            //Announces the winning mascot
             announceWinner(mascot);
         }
     }
 
-    //This method uses if/else conditions to check who is the winner
-    //After identifying the winner, this method displays the corresponding text by passing in...
-    //the appropriate string into displayFooterText()
-    //Before diplaying corresponding text, however, this method first clears the existing footer text...
-    //to prevent overlap of text objects
+    /* Checks who the winning mascot is and after identifying the winner, displays corresponding text
+    by passing in the appropriate string into displayFooterText() */
     private void announceWinner(Mascot mascot) {
-        
+
+        //Before diplaying corresponding text first clear the existing footer text
+        //Significance: to prevent overlap of text objects
         clearFooterText();
-        
+
         if (winner == greenMascot) {
             displayFooterText("The green griffin has won!");
         }
